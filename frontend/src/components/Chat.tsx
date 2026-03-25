@@ -10,6 +10,7 @@ import UserProfileModal from './UserProfileModal';
 import DirectMessage from './DirectMessage';
 import FileMessage from './FileMessage';
 import MessageContextMenu from './MessageContextMenu';
+import StarkLogo from './StarkLogo';
 
 interface ChatProps {
   token: string;
@@ -238,7 +239,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
           style={{ borderRight: '1px solid var(--border)' }}>
 
           <div className="px-5 py-4 flex items-center gap-2" style={{ borderBottom: '1px solid var(--border)' }}>
-            <div className="w-2 h-2 rounded-full pulse-teal shrink-0" style={{ background: 'var(--accent)' }} />
+            <StarkLogo size={28} />
             <div className="flex-1">
               <div className="text-sm font-black tracking-widest uppercase" style={{ color: 'var(--text-accent)' }}>STARK NET</div>
               <div className="text-[9px] tracking-widest" style={{ color: 'var(--text-muted)' }}>SECURE COMM LINK</div>
@@ -477,7 +478,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
         </div>
 
         {/* ── RIGHT SIDEBAR ── */}
-        <div className={`fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 md:relative md:translate-x-0 ${showMobileUsers ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 ${showMobileUsers ? 'translate-x-0' : 'translate-x-full'}`}>
           <ActiveUsersList activeUsers={activeUsers} allUsers={allUsers}
             onUserClick={(id) => { setSelectedUserId(id); setShowMobileUsers(false); }}
             onDMClick={(targetUser) => { setDmTargetUser(targetUser); setShowMobileUsers(false); }}

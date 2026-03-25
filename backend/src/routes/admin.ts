@@ -249,4 +249,22 @@ router.get('/voice-history', async (req: Request, res: Response) => {
   }
 });
 
+// POST /api/admin/terminal — VDS terminal command executor
+router.post('/terminal', async (req: Request, res: Response) => {
+  const { command } = req.body;
+  if (!command) return res.status(400).json({ error: 'No command' });
+
+  // Güvenlik: sadece izin verilen komutlar
+  const allowed = ['ls', 'pwd', 'docker', 'git', 'cat', 'echo', 'df', 'free', 'uptime', 'ps', 'whoami', 'date', 'node', 'npm'];
+  const cmd = command.trim().split(' ')[0];
+  if (!allowed.includes(cmd)) {
+    return res.json({ output: `Permission denied: '${cmd}' is not allowed.` });
+  }
+
+  const { exec } = require('child_process');
+  exec(command, { timeout: 10000, cwd: '/root/stark-industries-chat' }, (err: any, stdout: string, stderr: string) => {
+    res.json({ output: stdout || stderr || (err?.message ?? 'Done') });
+  });
+});
+
 export default router;

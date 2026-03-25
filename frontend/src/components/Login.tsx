@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LogIn, UserPlus, Shield, AlertTriangle, Sun, Moon, Monitor, Download } from 'lucide-react';
+import StarkLogo from './StarkLogo';
 
 interface LoginProps {
   onLogin: (token: string, user: any) => void;
@@ -73,7 +74,10 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
             <AlertTriangle size={10} style={{ color: 'var(--text-accent)' }} />
             <span className="text-[9px] tracking-[0.3em] uppercase" style={{ color: 'var(--text-accent)' }}>Restricted Access — Authorized Personnel Only</span>
           </div>
-          <div className="text-3xl font-black tracking-widest uppercase" style={{ color: 'var(--text-accent)' }}>STARK NET</div>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <StarkLogo size={40} />
+            <div className="text-3xl font-black tracking-widest uppercase" style={{ color: 'var(--text-accent)' }}>STARK NET</div>
+          </div>
           <div className="text-[10px] tracking-[0.4em] mt-1 uppercase" style={{ color: 'var(--text-muted)' }}>Stark Industries Internal Comm</div>
         </div>
 
