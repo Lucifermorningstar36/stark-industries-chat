@@ -1,0 +1,40 @@
+{
+  "name": "stark-industries-chat",
+  "version": "1.0.0",
+  "description": "Stark Industries Secure Comm — Desktop",
+  "main": "dist-electron/main.js",
+  "author": "Stark Industries",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"electron-wait-vite\"",
+    "build": "tsc -p tsconfig.electron.json && vite build && electron-builder",
+    "build:win": "tsc -p tsconfig.electron.json && vite build && electron-builder --win",
+    "build:mac": "tsc -p tsconfig.electron.json && vite build && electron-builder --mac",
+    "build:linux": "tsc -p tsconfig.electron.json && vite build && electron-builder --linux",
+    "electron:dev": "concurrently -k \"vite --port 5173\" \"wait-on tcp:5173 && tsc -p tsconfig.electron.json && electron .\"",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.0",
+    "vite": "^5.1.0",
+    "vite-plugin-electron": "^0.28.4",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "wait-on": "^7.2.0"
+  }
+}

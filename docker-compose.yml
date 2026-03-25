@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: stark_db
+    environment:
+      POSTGRES_USER: stark_admin
+      POSTGRES_PASSWORD: stark_password
+      POSTGRES_DB: stark_industries
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - stark_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stark_admin -d stark_industries"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stark_backend
+    expose:
+      - "5000"
+    environment:
+      - DATABASE_URL=postgresql://stark_admin:stark_password@db:5432/stark_industries
+      - PORT=5000
+      - JWT_SECRET=super_secret_stark_key_2026
+      - FRONTEND_URL=https://stark.net.tr
+      - RELEASE_DIR=/app/desktop/release
+    volumes:
+      - ./desktop/release:/app/desktop/release:ro
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - stark_net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: stark_frontend
+    expose:
+      - "5173"
+    depends_on:
+      - backend
+    networks:
+      - stark_net
+    restart: unless-stopped
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    container_name: stark_admin
+    expose:
+      - "5174"
+    depends_on:
+      - backend
+    networks:
+      - stark_net
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: stark_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+      - admin
+    networks:
+      - stark_net
+
+networks:
+  stark_net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+  uploads_data:

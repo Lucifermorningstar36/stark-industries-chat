@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  username  String    @unique
+  password  String
+  avatarUrl String?   @db.Text
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  sentDMs       DirectMessage[] @relation("SentDMs")
+  receivedDMs   DirectMessage[] @relation("ReceivedDMs")
+}
+
+model Channel {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  type      ChannelType @default(TEXT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+}
+
+enum ChannelType {
+  TEXT
+  VOICE
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  content     String
+  fileUrl     String?  @db.Text
+  fileType    String?  // "image" | "audio" | "file"
+  fileName    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  channelId   String
+  channel     Channel  @relation(fields: [channelId], references: [id])
+}
+
+model DirectMessage {
+  id          String   @id @default(uuid())
+  content     String
+  fileUrl     String?  @db.Text
+  fileType    String?
+  fileName    String?
+  createdAt   DateTime @default(now())
+  senderId    String
+  sender      User     @relation("SentDMs", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    User     @relation("ReceivedDMs", fields: [receiverId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
