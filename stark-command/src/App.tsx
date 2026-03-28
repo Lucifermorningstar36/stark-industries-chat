@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client'
 import axios from 'axios'
 import { Send, Zap, CheckCircle, XCircle, Clock, ChevronRight, Terminal, Users, Activity } from 'lucide-react'
 
-const API = import.meta.env.VITE_API_URL || ''
+const API = (import.meta as any).env?.VITE_API_URL || ''
 
 interface Agent { id: string; name: string; role: string; color: string; icon: string }
 interface LogEntry { id: string; agentId: string; agentName: string; message: string; type: string; timestamp: string }
@@ -28,7 +28,7 @@ export default function App() {
     s.on('task:created', (t: Task) => setTasks(prev => [t, ...prev]))
     s.on('task:update', ({ taskId, status }: any) => {
       setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t))
-      setActiveTask(prev => prev?.id === taskId ? { ...prev, status } : prev)
+      setActiveTask(prev => prev && prev.id === taskId ? { ...prev, status } : prev)
     })
     s.on('task:log', ({ taskId, log }: any) => {
       setActiveTask(prev => {
