@@ -93,6 +93,7 @@ const NAV_ITEMS = [
   { id: 'channels',  label: 'CHANNELS',     sub: 'sys.comms',     tag: 'COM', color: '#34d399', emissive: '#059669' },
   { id: 'messages',  label: 'MESSAGE LOG',  sub: 'sys.archive',   tag: 'LOG', color: '#f59e0b', emissive: '#d97706' },
   { id: 'voice',     label: 'VOICE HIST',   sub: 'sys.voice',     tag: 'VOX', color: '#f472b6', emissive: '#db2777' },
+  { id: 'worldmon',  label: 'WORLD MON',    sub: 'sys.intel',     tag: 'INT', color: '#a3e635', emissive: '#65a30d' },
 ]
 
 function NavNode({ item, index, total, active, onClick }: {
@@ -537,6 +538,17 @@ export default function Scene3D({ token, admin, onLogout }: { token?: string; ad
               {activeModal === 'personnel' && <UsersPage token={token!} />}
               {activeModal === 'channels'  && <Channels token={token!} />}
               {activeModal === 'messages'  && <Messages token={token!} />}
+              {activeModal === 'worldmon'  && (
+                <div className="w-full h-full" style={{ minHeight: '70vh' }}>
+                  <iframe
+                    src="https://worldmonitor.app"
+                    className="w-full h-full"
+                    style={{ minHeight: '70vh', border: 'none' }}
+                    title="World Monitor"
+                    allow="fullscreen"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
