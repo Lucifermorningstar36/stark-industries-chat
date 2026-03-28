@@ -18,3 +18,7 @@ admin.stark.net.tr {
     reverse_proxy /api/* http://backend:5000
     reverse_proxy * http://admin:5174
 }
+
+intel.stark.net.tr {
+    reverse_proxy * http://stark_worldmonitor:8080
+}
