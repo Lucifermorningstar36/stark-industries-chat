@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #020409;
+  --panel: rgba(2,4,9,0.88);
+  --border: rgba(59,130,246,0.2);
+  --accent: #06b6d4;
+  --text: #93c5fd;
+  --muted: rgba(96,165,250,0.4);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.3); border-radius: 2px; }
+
+.scanline {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}

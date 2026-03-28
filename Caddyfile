@@ -8,6 +8,12 @@ stark.net.tr, www.stark.net.tr {
     reverse_proxy * http://frontend:5173
 }
 
+command.stark.net.tr {
+    reverse_proxy /api/* http://stark-command-api:5176
+    reverse_proxy /socket.io/* http://stark-command-api:5176
+    reverse_proxy * http://stark-command:5175
+}
+
 admin.stark.net.tr {
     reverse_proxy /api/* http://backend:5000
     reverse_proxy * http://admin:5174

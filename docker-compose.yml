@@ -70,6 +70,36 @@ services:
       - stark_net
     restart: unless-stopped
 
+  stark-command-api:
+    build:
+      context: ./stark-command-api
+      dockerfile: Dockerfile
+    container_name: stark_command_api
+    expose:
+      - "5176"
+    environment:
+      - PORT=5176
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=qwen2.5:0.5b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - stark_net
+    restart: unless-stopped
+
+  stark-command:
+    build:
+      context: ./stark-command
+      dockerfile: Dockerfile
+    container_name: stark_command
+    expose:
+      - "5175"
+    depends_on:
+      - stark-command-api
+    networks:
+      - stark_net
+    restart: unless-stopped
+
   caddy:
     image: caddy:2-alpine
     container_name: stark_caddy
@@ -86,6 +116,8 @@ services:
       - frontend
       - backend
       - admin
+      - stark-command
+      - stark-command-api
     networks:
       - stark_net
 
