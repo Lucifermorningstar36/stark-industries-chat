@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'leaflet/dist/leaflet.css';
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #020409;
+  color: #93c5fd;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  overflow: hidden;
+}
+
+/* Leaflet dark override */
+.leaflet-container {
+  background: #0a0f1a !important;
+  font-family: inherit;
+}
+.leaflet-tile {
+  filter: brightness(0.4) saturate(0.3) hue-rotate(180deg);
+}
+.leaflet-control-zoom a {
+  background: rgba(2,4,9,0.9) !important;
+  color: #06b6d4 !important;
+  border-color: rgba(59,130,246,0.3) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(2,4,9,0.7) !important;
+  color: rgba(96,165,250,0.3) !important;
+  font-size: 9px !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.3); border-radius: 2px; }
+
+/* Scanline effect */
+.scanline {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(6,182,212,0.4); }
+  50% { box-shadow: 0 0 12px rgba(6,182,212,0.8); }
+}
+.pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.ticker-inner { animation: ticker 40s linear infinite; }
+.ticker-inner:hover { animation-play-state: paused; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blink { animation: blink 1s step-end infinite; }
+
+/* Panel */
+.si-panel {
+  background: rgba(2,4,9,0.85);
+  border: 1px solid rgba(59,130,246,0.2);
+  backdrop-filter: blur(8px);
+}
+
+/* News item hover */
+.news-item:hover { background: rgba(59,130,246,0.06); }

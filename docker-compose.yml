@@ -70,6 +70,17 @@ services:
       - stark_net
     restart: unless-stopped
 
+  stark-intel:
+    build:
+      context: ./stark-intel
+      dockerfile: Dockerfile
+    container_name: stark_intel
+    expose:
+      - "5177"
+    networks:
+      - stark_net
+    restart: unless-stopped
+
   stark-command-api:
     build:
       context: ./stark-command-api
