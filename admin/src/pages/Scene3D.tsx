@@ -539,14 +539,40 @@ export default function Scene3D({ token, admin, onLogout }: { token?: string; ad
               {activeModal === 'channels'  && <Channels token={token!} />}
               {activeModal === 'messages'  && <Messages token={token!} />}
               {activeModal === 'worldmon'  && (
-                <div className="w-full h-full" style={{ minHeight: '70vh' }}>
-                  <iframe
-                    src="https://worldmonitor.app"
-                    className="w-full h-full"
-                    style={{ minHeight: '70vh', border: 'none' }}
-                    title="World Monitor"
-                    allow="fullscreen"
-                  />
+                <div className="flex flex-col items-center justify-center gap-6 py-16"
+                  style={{ background: '#020409', minHeight: '60vh' }}>
+                  <svg width="60" height="60" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18.5" stroke="#a3e635" strokeWidth="1.5" opacity="0.7"/>
+                    <circle cx="20" cy="20" r="12" stroke="#a3e635" strokeWidth="1" opacity="0.5"/>
+                    <circle cx="20" cy="20" r="3.5" fill="#a3e635" opacity="0.9"/>
+                    <line x1="20" y1="1" x2="20" y2="7" stroke="#a3e635" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="20" y1="33" x2="20" y2="39" stroke="#a3e635" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="1" y1="20" x2="7" y2="20" stroke="#a3e635" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="33" y1="20" x2="39" y2="20" stroke="#a3e635" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <div className="text-center space-y-2">
+                    <div className="text-lime-400 font-mono text-sm tracking-widest uppercase">World Monitor</div>
+                    <div className="text-blue-400/40 font-mono text-[10px]">Real-time global intelligence dashboard</div>
+                    <div className="text-blue-400/30 font-mono text-[9px]">435+ news feeds · 3D globe · AI-powered</div>
+                  </div>
+                  <div className="flex gap-3">
+                    <a href="https://worldmonitor.app" target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-xs tracking-widest transition-all"
+                      style={{ background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.4)', color: '#a3e635' }}>
+                      🌍 WORLD
+                    </a>
+                    <a href="https://finance.worldmonitor.app" target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-xs tracking-widest transition-all"
+                      style={{ background: 'rgba(163,230,53,0.05)', border: '1px solid rgba(163,230,53,0.2)', color: '#a3e635' }}>
+                      📈 FINANCE
+                    </a>
+                    <a href="https://tech.worldmonitor.app" target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-xs tracking-widest transition-all"
+                      style={{ background: 'rgba(163,230,53,0.05)', border: '1px solid rgba(163,230,53,0.2)', color: '#a3e635' }}>
+                      💻 TECH
+                    </a>
+                  </div>
+                  <div className="text-blue-400/20 font-mono text-[9px]">Yeni sekmede açılır</div>
                 </div>
               )}
             </div>
