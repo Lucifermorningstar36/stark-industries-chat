@@ -121,7 +121,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
 // ── Verify Reset Token ────────────────────────────────────────────────────────
 router.get('/verify-reset-token/:token', async (req: Request, res: Response) => {
   try {
-    const rawToken = req.params.token;
+    const rawToken = String(req.params.token);
     const record = await prisma.passwordResetToken.findUnique({
       where: { token: rawToken }
     });
