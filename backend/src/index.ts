@@ -277,6 +277,25 @@ io.on('connection', async (socket: Socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, async () => {
   console.log(`[SERVER] Backend is running on port ${PORT}`);
+
+  // ── Auto-seed default channels if none exist ──────────────────────────────
+  try {
+    const count = await prisma.channel.count();
+    if (count === 0) {
+      await prisma.channel.createMany({
+        data: [
+          { name: 'genel',      type: 'TEXT'  },
+          { name: 'duyurular',  type: 'TEXT'  },
+          { name: 'lobi',       type: 'VOICE' },
+          { name: 'toplanti',   type: 'VOICE' },
+        ],
+        skipDuplicates: true,
+      });
+      console.log('[SERVER] Default channels created.');
+    }
+  } catch (e) {
+    console.error('[SERVER] Channel seed failed:', e);
+  }
 });
