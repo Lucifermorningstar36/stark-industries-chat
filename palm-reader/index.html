@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stark Industries - Palm Reader</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- MediaPipe Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Video for capturing camera stream (hidden visually but used for input) -->
+        <video id="input_video" autoplay playsinline></video>
+
+        <!-- Canvas for drawing the cinematic dashboard -->
+        <canvas id="output_canvas"></canvas>
+
+        <!-- Container for 3D Hologram -->
+        <div id="three_container"></div>
+
+        <!-- Overlay UI elements -->
+        <div class="overlay-ui">
+            <div class="header">
+                <h1>STARK INDUSTRIES</h1>
+                <p>KINEMATIC HAND MAPPING SYSTEM v3.1</p>
+            </div>
+            
+            <!-- Virtual Physics Buttons -->
+            <div class="virtual-button btn-destroy" id="btn_destroy">[ DESTROY CORE ]</div>
+            <div class="virtual-button btn-recreate" id="btn_recreate">[ RECREATE CORE ]</div>
+
+            <div class="status-panel">
+                <div class="status-item">
+                    <span class="label">SYS STATUS</span>
+                    <span class="value success">ONLINE</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">TRACKING</span>
+                    <span class="value highlight" id="tracking_status">SEARCHING...</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">FRAME RATE</span>
+                    <span class="value" id="fps_counter">0 FPS</span>
+                </div>
+            </div>
+
+            <div class="telemetry-panel" id="telemetry_panel">
+                <div class="telemetry-header">3D CONTROLLER TELEMETRY</div>
+                <div class="status-item">
+                    <span class="label">GESTURE:</span>
+                    <span class="value success" id="gesture_mode">HOVER</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">X_POS:</span>
+                    <span class="value" id="t_x">0.000</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Y_POS:</span>
+                    <span class="value" id="t_y">0.000</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Z_DEPTH:</span>
+                    <span class="value" id="t_z">0.000</span>
+                </div>
+            </div>
+
+            <div class="footer-hud">
+                <div class="bar"></div>
+                <div class="data-stream">INTEL-LINK: ESTABLISHED | SECURITY PROTOCOL: OMEGA</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="hologram.js"></script>
+</body>
+
+</html>

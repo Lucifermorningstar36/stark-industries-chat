@@ -70,8 +70,8 @@ export default function DownloadPage({ dark, onToggleTheme }: Props) {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center">
 
         {/* Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(0,180,200,0.06) 0%, transparent 70%)' }} />
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(0,180,200,0.06) 0%, transparent 70%)', zIndex: 0 }} />
 
         <div className="relative z-10 max-w-2xl w-full space-y-8">
 

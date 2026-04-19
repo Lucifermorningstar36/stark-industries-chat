@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+  --cyan: #00f0ff;
+  --cyan-dim: rgba(0, 240, 255, 0.4);
+  --dark-bg: #050a0e;
+  --text-primary: #00f0ff;
+  --text-secondary: #0099aa;
+  --highlight: #ff3366;
+  --success: #00ff66;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #0a111a 0%, #000000 100%);
+}
+
+#input_video {
+  display: none;
+  /* Kamerayı gizli tutuyoruz, çizimleri canvas yapıcak */
+}
+
+#output_canvas {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 1;
+  /* Görüntü aynalanmasını engellemek için CSS ile çevirmiyoruz, bunu JS canvas ctx.scale ile yapıcaz */
+}
+
+/* UI Overlays */
+.overlay-ui {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Header */
+.header {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 2rem;
+  letter-spacing: 5px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px var(--cyan-dim);
+  border-bottom: 2px solid var(--cyan-dim);
+  padding-bottom: 5px;
+}
+
+.header p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+/* Status Panel */
+.status-panel {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: rgba(0, 240, 255, 0.05);
+  padding: 20px;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 5px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+  font-size: 0.9rem;
+}
+
+.status-item .label {
+  color: var(--text-secondary);
+}
+
+.value.success { color: var(--success); text-shadow: 0 0 5px var(--success); }
+.value.highlight { color: var(--highlight); text-shadow: 0 0 5px var(--highlight); }
+.value.warning { color: #ff9900; text-shadow: 0 0 5px #ff9900; }
+.value.danger { color: #ff0033; text-shadow: 0 0 5px #ff0033; }
+
+/* Telemetry Panel */
+.telemetry-panel {
+  position: absolute;
+  top: 150px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(0, 240, 255, 0.05);
+  padding: 15px;
+  border: 1px solid var(--cyan-dim);
+  border-left: 3px solid var(--cyan);
+  background: linear-gradient(90deg, rgba(0,240,255,0.1) 0%, transparent 100%);
+}
+
+.telemetry-header {
+  font-size: 0.8rem;
+  color: var(--cyan);
+  border-bottom: 1px dashed var(--cyan-dim);
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+
+/* Footer HUD */
+.footer-hud {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  text-align: center;
+}
+
+.footer-hud .bar {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  margin-bottom: 10px;
+}
+
+.footer-hud .data-stream {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 3px;
+}
+
+/* Animations that will be injected/used via JS styling or canvas but here for some html parts */
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.pulsing {
+  animation: pulse 2s infinite;
+}
+
+/* 3D Container */
+#three_container {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Virtual Physics Buttons */
+.virtual-button {
+  position: absolute;
+  top: 45%;
+  pointer-events: auto; /* Let elementFromPoint detect it */
+  border: 1px dashed var(--cyan-dim);
+  background: rgba(0, 240, 255, 0.05);
+  color: var(--cyan);
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  text-shadow: 0 0 10px var(--cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+  transform: translateY(-50%);
+}
+
+.virtual-button.active {
+  background: rgba(255, 51, 102, 0.4);
+  border-color: #ff3366;
+  color: #ff3366;
+  text-shadow: 0 0 15px #ff3366;
+  box-shadow: 0 0 25px rgba(255, 51, 102, 0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.btn-destroy {
+  left: 40px;
+}
+
+.btn-recreate {
+  right: 40px;
+}

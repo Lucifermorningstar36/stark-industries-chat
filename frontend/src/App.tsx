@@ -9,7 +9,12 @@ export default function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [token, setToken] = useState<string | null>(localStorage.getItem('stark_token'));
   const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('stark_user') || 'null'));
-  const [dark, setDark] = useState<boolean>(() => localStorage.getItem('stark_theme') === 'dark');
+  const [dark, setDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem('stark_theme');
+    if (saved) return saved === 'dark';
+    // Fallback: use system preference
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+  });
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);

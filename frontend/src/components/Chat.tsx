@@ -224,7 +224,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
   const activeChannel = channels.find(c => c.id === activeChannelId);
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-hidden si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
+    <div className="flex flex-col h-screen overflow-hidden si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
       onClick={() => contextMenu && setContextMenu(null)}>
       <div className="scanline" />
       <div className="flex flex-1 overflow-hidden relative">
@@ -478,7 +478,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
         </div>
 
         {/* ── RIGHT SIDEBAR ── */}
-        <div className={`fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 ${showMobileUsers ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 md:relative md:inset-auto md:translate-x-0 ${showMobileUsers ? 'translate-x-0' : 'translate-x-full'}`}>
           <ActiveUsersList activeUsers={activeUsers} allUsers={allUsers}
             onUserClick={(id) => { setSelectedUserId(id); setShowMobileUsers(false); }}
             onDMClick={(targetUser) => { setDmTargetUser(targetUser); setShowMobileUsers(false); }}
