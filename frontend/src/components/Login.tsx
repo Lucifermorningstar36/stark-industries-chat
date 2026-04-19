@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LogIn, UserPlus, Shield, AlertTriangle, Sun, Moon, Monitor, Download } from 'lucide-react';
 import StarkLogo from './StarkLogo';
+import ForgotPassword from './ForgotPassword';
 
 interface LoginProps {
   onLogin: (token: string, user: any) => void;
@@ -19,6 +20,7 @@ const BOOT_LINES = [
 
 export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
   const [isRegister, setIsRegister] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -128,8 +130,9 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
                   </div>
                 )}
                 <div>
-                  <label className="block text-[9px] tracking-widest uppercase mb-1.5" style={{ color: 'var(--text-muted)' }}>Agent ID</label>
-                  <input type="text" placeholder="username" required value={username} onChange={e => setUsername(e.target.value)}
+                  <label className="block text-[9px] tracking-widest uppercase mb-1.5" style={{ color: 'var(--text-muted)' }}>Agent ID / E-posta</label>
+                  <input type="text" placeholder="kullanici_adi veya e-posta" required value={username} onChange={e => setUsername(e.target.value)}
+                    autoComplete="username"
                     className={inputCls} style={{ background: 'var(--bg-input)', border: '1px solid var(--border)', color: 'var(--text-primary)' }} />
                 </div>
                 <div>
@@ -145,14 +148,33 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
                     : <><LogIn size={14} /> AUTHENTICATE</>}
                 </button>
               </form>
-              <div className="text-center pt-1">
-                <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{isRegister ? 'Already cleared?' : 'Need clearance?'}</span>
-                <button onClick={() => { setIsRegister(!isRegister); setError(''); }}
-                  className="ml-2 text-[10px] transition-colors underline underline-offset-2"
-                  style={{ color: 'var(--text-accent)' }}>
-                  {isRegister ? 'LOGIN' : 'REGISTER'}
-                </button>
+              <div className="text-center pt-1 space-y-2">
+                <div>
+                  <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{isRegister ? 'Already cleared?' : 'Need clearance?'}</span>
+                  <button onClick={() => { setIsRegister(!isRegister); setError(''); }}
+                    className="ml-2 text-[10px] transition-colors underline underline-offset-2"
+                    style={{ color: 'var(--text-accent)' }}>
+                    {isRegister ? 'LOGIN' : 'REGISTER'}
+                  </button>
+                </div>
+                {!isRegister && (
+                  <button onClick={() => { setShowForgot(true); setError(''); }}
+                    className="text-[10px] transition-colors hover:opacity-80"
+                    style={{ color: 'var(--text-muted)' }}>
+                    Şifremi Unuttum
+                  </button>
+                )}
               </div>
+            </div>
+          </div>
+        )}
+        {/* Forgot Password overlay */}
+        {ready && showForgot && (
+          <div className="si-panel relative overflow-hidden boot-in rounded-lg mt-0 -mt-0">
+            <div className="absolute top-2 left-2 w-3 h-3 bracket-tl" />
+            <div className="absolute top-2 right-2 w-3 h-3 bracket-tr" />
+            <div className="p-6">
+              <ForgotPassword onBack={() => setShowForgot(false)} />
             </div>
           </div>
         )}

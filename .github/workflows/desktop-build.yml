@@ -1,0 +1,122 @@
+name: Desktop Build — Windows / Linux / macOS
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (example: 1.1.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build-windows-linux:
+    name: Build Windows & Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build Windows (x64)
+        working-directory: desktop
+        run: npm run build:win
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Linux (AppImage)
+        working-directory: desktop
+        run: npm run build:linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StarkChat-Windows
+          path: desktop/release/*.exe
+          retention-days: 30
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StarkChat-Linux
+          path: desktop/release/*.AppImage
+          retention-days: 30
+
+  build-macos:
+    name: Build macOS (DMG)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build macOS (Universal DMG — x64 + arm64)
+        working-directory: desktop
+        run: npm run build:mac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Code signing disabled for unsigned builds (users can right-click → Open)
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StarkChat-macOS
+          path: desktop/release/*.dmg
+          retention-days: 30
+
+  create-release:
+    name: Create GitHub Release
+    needs: [build-windows-linux, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            StarkChat-Windows/*.exe
+            StarkChat-Linux/*.AppImage
+            StarkChat-macOS/*.dmg
+          name: "Stark Industries Chat ${{ github.ref_name }}"
+          body: |
+            ## Stark Industries Chat — ${{ github.ref_name }}
+            
+            ### Platformlar
+            | Platform | İndir |
+            |---|---|
+            | Windows 10/11 (x64) | `.exe` (NSIS Installer) |
+            | Linux (x64) | `.AppImage` |
+            | macOS 12+ (Intel + Apple Silicon) | `.dmg` |
+            
+            ### macOS Kurulum Notu
+            İmzasız build kullanıyorsanız: Sağ tıkla → Aç → Aç butonuna tıkla.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

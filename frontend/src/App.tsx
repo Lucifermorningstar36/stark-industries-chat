@@ -4,6 +4,7 @@ import Chat from './components/Chat';
 import Intro from './components/Intro';
 import DownloadBanner from './components/DownloadBanner';
 import DownloadPage from './pages/DownloadPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -12,7 +13,6 @@ export default function App() {
   const [dark, setDark] = useState<boolean>(() => {
     const saved = localStorage.getItem('stark_theme');
     if (saved) return saved === 'dark';
-    // Fallback: use system preference
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
   });
 
@@ -38,6 +38,11 @@ export default function App() {
   // /download sayfası
   if (window.location.pathname === '/download') {
     return <DownloadPage dark={dark} onToggleTheme={() => setDark(d => !d)} />;
+  }
+
+  // /reset-password?token=... sayfası
+  if (window.location.pathname === '/reset-password') {
+    return <ResetPasswordPage />;
   }
 
   return (

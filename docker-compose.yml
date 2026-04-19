@@ -34,6 +34,9 @@ services:
       - JWT_SECRET=super_secret_stark_key_2026
       - FRONTEND_URL=https://stark.net.tr
       - RELEASE_DIR=/app/desktop/release
+      - RESEND_API_KEY=${RESEND_API_KEY:-resend_key_buraya}
+      - RESEND_FROM=Stark Industries <noreply@stark.net.tr>
+      - APP_URL=https://stark.net.tr
     volumes:
       - ./desktop/release:/app/desktop/release:ro
       - uploads_data:/app/uploads

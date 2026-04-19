@@ -2,14 +2,15 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // Window controls
-  minimize:    () => ipcRenderer.send('win:minimize'),
-  maximize:    () => ipcRenderer.send('win:maximize'),
-  close:       () => ipcRenderer.send('win:close'),
+  minimize: () => ipcRenderer.send('win:minimize'),
+  maximize: () => ipcRenderer.send('win:maximize'),
+  close: () => ipcRenderer.send('win:close'),
   isMaximized: () => ipcRenderer.invoke('win:isMaximized'),
+  platform: () => ipcRenderer.invoke('win:platform'),
 
   // Theme
-  getSystemTheme: () => ipcRenderer.invoke('theme:get'),
+  getTheme: () => ipcRenderer.invoke('theme:get'),
 
-  // Platform
-  platform: process.platform,
+  // Notifications
+  notify: (title: string, body: string) => ipcRenderer.send('notify', { title, body }),
 })
