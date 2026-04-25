@@ -49,7 +49,9 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+  const isElectron = navigator.userAgent.toLowerCase().includes('electron');
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const API_URL = isElectron ? 'https://stark.net.tr' : (isLocalhost ? 'http://localhost:5000' : '');
 
   const fetchChannels = async () => {
     try {
@@ -224,7 +226,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
   const activeChannel = channels.find(c => c.id === activeChannelId);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
+    <div className="flex flex-col h-[100dvh] w-full fixed inset-0 overflow-hidden si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
       onClick={() => contextMenu && setContextMenu(null)}>
       <div className="scanline" />
       <div className="flex flex-1 overflow-hidden relative">
@@ -324,10 +326,12 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
             </div>
           </div>
 
-          <a href="/download" className="mx-3 mb-2 flex items-center justify-center gap-2 py-2 rounded-lg text-[10px] font-bold tracking-widest uppercase transition-all"
-            style={{ background: 'var(--accent-bg)', border: '1px solid var(--border-accent)', color: 'var(--text-accent)' }}>
-            <Monitor size={12} /> PC UYGULAMASI
-          </a>
+          {!isElectron && (
+            <a href="/download" className="mx-3 mb-2 flex items-center justify-center gap-2 py-2 rounded-lg text-[10px] font-bold tracking-widest uppercase transition-all"
+              style={{ background: 'var(--accent-bg)', border: '1px solid var(--border-accent)', color: 'var(--text-accent)' }}>
+              <Monitor size={12} /> PC UYGULAMASI
+            </a>
+          )}
 
           <div className="p-3 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-panel)' }}>
             <div className="flex items-center gap-2.5">
@@ -351,7 +355,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
 
         {/* ── MAIN AREA ── */}
         <div className="flex-1 flex flex-col relative overflow-hidden"
-          style={{ backgroundImage: 'url(/chat-arka-plan.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          style={{ backgroundImage: 'url(./chat-arka-plan.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="absolute inset-0 pointer-events-none" style={{ background: dark ? 'rgba(13,17,23,0.82)' : 'rgba(200,208,216,0.78)' }} />
 
           {/* Header */}
@@ -473,6 +477,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
           {voiceChannelId && (
             <VoiceRoom socket={socket} channelId={voiceChannelId} user={user}
               isMinimized={activeChannelId !== voiceChannelId}
+              previewParticipants={voiceRoomsInfo.get(voiceChannelId) || []}
               onDisconnect={() => { setVoiceChannelId(null); if (activeChannelId === voiceChannelId) setActiveChannelId(null); }} />
           )}
         </div>

@@ -6,7 +6,9 @@ interface Props {
   onBack: () => void;
 }
 
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+const isElectron = navigator.userAgent.toLowerCase().includes('electron');
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_URL = isElectron ? 'https://stark.net.tr' : (isLocalhost ? 'http://localhost:5000' : '');
 
 export default function ForgotPassword({ onBack }: Props) {
   const [email, setEmail] = useState('');

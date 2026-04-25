@@ -8,6 +8,7 @@ interface VoiceRoomProps {
   user: any;
   isMinimized?: boolean;
   onDisconnect?: () => void;
+  previewParticipants?: any[];
 }
 
 const ICE_SERVERS = {
@@ -171,7 +172,7 @@ const VideoPlayer = ({ stream, isLocal, user, isMuted, refreshTrigger, globalMut
   );
 };
 
-export default function VoiceRoom({ socket, channelId, user, isMinimized, onDisconnect }: VoiceRoomProps) {
+export default function VoiceRoom({ socket, channelId, user, isMinimized, onDisconnect, previewParticipants = [] }: VoiceRoomProps) {
   const [participants, setParticipants] = useState<any[]>([]);
   const [inCall, setInCall] = useState(false);
 
@@ -524,6 +525,33 @@ export default function VoiceRoom({ socket, channelId, user, isMinimized, onDisc
               Connect to the secure Stark Industries voice network. Communications are end-to-end encrypted.
             </p>
           </div>
+
+          {previewParticipants.length > 0 && (
+            <div className="mb-12 w-full max-w-4xl bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-zinc-800/50 p-6">
+              <h4 className="text-sm font-medium text-zinc-400 mb-6 flex items-center justify-center gap-2">
+                <Users size={16} />
+                Şu An İçeride Olanlar ({previewParticipants.length})
+              </h4>
+              <div className="flex flex-wrap justify-center gap-6">
+                {previewParticipants.map((p: any) => (
+                  <div key={p.socketId} className="flex flex-col items-center gap-3 animate-fade-in group">
+                    <div className="relative">
+                      {p.user.avatarUrl ? (
+                        <img src={p.user.avatarUrl} alt={p.user.username} className="w-16 h-16 rounded-full object-cover ring-2 ring-indigo-500/30 group-hover:ring-indigo-500 transition-all shadow-lg" />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold bg-zinc-800 text-zinc-300 ring-2 ring-indigo-500/30 group-hover:ring-indigo-500 transition-all shadow-lg">
+                          {p.user.username[0].toUpperCase()}
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-zinc-900 rounded-full"></div>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors">{p.user.username}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <button
             onClick={joinVoice}
             className="group relative px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] flex items-center gap-3 overflow-hidden"

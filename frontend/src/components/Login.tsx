@@ -18,6 +18,10 @@ const BOOT_LINES = [
   'Awaiting authentication credentials.',
 ];
 
+const isElectron = navigator.userAgent.toLowerCase().includes('electron');
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_URL = isElectron ? 'https://stark.net.tr' : (isLocalhost ? 'http://localhost:5000' : '');
+
 export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
   const [isRegister, setIsRegister] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
@@ -42,7 +46,6 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
     e.preventDefault();
     setError(''); setLoading(true);
     try {
-      const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
       const payload = isRegister ? { username, password, email } : { username, password };
       const { data } = await axios.post(`${API_URL}${endpoint}`, payload);
@@ -56,9 +59,14 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
   const inputCls = "w-full py-2.5 px-4 text-sm rounded-lg focus:outline-none transition-colors backdrop-blur-sm";
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden si-grid-bg"
-      style={{ background: 'var(--bg-base)' }}>
-      <div className="scanline" />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{ background: '#050a0e' }}>
+      <div className="absolute inset-0 z-0 opacity-40"
+        style={{
+          backgroundImage: 'url(./stark-background.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'grayscale(30%) contrast(120%)'
+        }} />
 
       {/* Theme toggle — top right */}
       <button onClick={onToggleTheme} className="theme-toggle fixed top-4 right-4 z-50" title={dark ? 'Light mode' : 'Dark mode'}>
@@ -180,16 +188,17 @@ export default function Login({ onLogin, dark, onToggleTheme }: LoginProps) {
         )}
 
         <div className="text-center mt-4 space-y-3">
-          {/* Desktop download button */}
-          <a
-            href="/download"
-            className="flex items-center justify-center gap-2.5 w-full py-3 rounded-lg transition-all text-xs font-bold tracking-widest uppercase"
-            style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-accent)', color: 'var(--text-accent)' }}
-          >
-            <Monitor size={14} />
-            PC UYGULAMASINI İNDİR
-            <Download size={13} />
-          </a>
+          {!isElectron && (
+            <a
+              href="/download"
+              className="flex items-center justify-center gap-2.5 w-full py-3 rounded-lg transition-all text-xs font-bold tracking-widest uppercase"
+              style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-accent)', color: 'var(--text-accent)' }}
+            >
+              <Monitor size={14} />
+              PC UYGULAMASINI İNDİR
+              <Download size={13} />
+            </a>
+          )}
           <span className="block text-[9px] tracking-widest" style={{ color: 'var(--text-muted)' }}>
             STARK INDUSTRIES © 2026 — ALL TRANSMISSIONS MONITORED
           </span>

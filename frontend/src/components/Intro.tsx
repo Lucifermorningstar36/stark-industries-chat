@@ -29,7 +29,7 @@ export default function Intro({ onFinish }: Props) {
     <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden">
       <video
         ref={videoRef}
-        src="/intro.mp4"
+        src="./intro.mp4"
         autoPlay
         muted
         playsInline
