@@ -60,7 +60,7 @@ app.get('/api/download/latest', (req: Request, res: Response) => {
   const extMap: Record<string, string[]> = {
     win:   ['.exe'],
     mac:   ['.dmg'],
-    linux: ['.AppImage'],
+    linux: ['.appimage', '.deb'],
   };
 
   const exts = extMap[platform] || ['.exe'];
