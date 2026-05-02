@@ -44,9 +44,11 @@
       "category": "Network",
       "description": "Stark Industries Secure Comm Link",
       "desktop": {
-        "Name": "Stark Chat",
-        "Comment": "Stark Industries Secure Communication",
-        "Keywords": "chat;communication;stark"
+        "entry": {
+          "Name": "Stark Chat",
+          "Comment": "Stark Industries Secure Communication",
+          "Keywords": "chat;communication;stark"
+        }
       }
     }
   },
