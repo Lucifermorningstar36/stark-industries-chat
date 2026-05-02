@@ -2,16 +2,35 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- Safari / iOS -->
+    <!--
+      CRITICAL MOBILE KEYBOARD FIX:
+      - viewport-fit=cover: extends into notch/safe areas
+      - interactive-widget=resizes-content: Chrome Android 108+ — keyboard
+        resizes the layout viewport instead of the visual viewport only,
+        preventing the "blank space below keyboard" bug.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+
+    <!-- Safari / iOS PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Stark.Net" />
     <meta name="theme-color" content="#0d1117" />
+
+    <!-- Favicons (SVG preferred, PNG fallback) -->
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/icon-512.png" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- SEO -->
-    <meta name="description" content="Stark Industries Güvenli İletişim Platformu" />
-    <title>Stark Industries Chat</title>
+    <meta name="description" content="Stark Industries Güvenli İletişim Platformu — Şifreli, hızlı ve güvenli." />
+    <meta name="keywords" content="stark, chat, secure, communication, stark.net" />
+    <title>Stark Net — Güvenli İletişim</title>
   </head>
-  <body class="bg-gray-900 text-white">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

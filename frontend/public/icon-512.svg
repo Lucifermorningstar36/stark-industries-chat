@@ -1,0 +1,85 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="512" height="512" fill="#0d1117"/>
+  
+  <!-- Subtle grid -->
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(6,182,212,0.06)" stroke-width="1"/>
+    </pattern>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-strong">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0d2535" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="512" height="512" fill="url(#bg-glow)"/>
+  <rect width="512" height="512" fill="url(#grid)"/>
+  
+  <!-- Hexagon outer -->
+  <!-- points scaled to 512x512, center 256,256, radius ~220 -->
+  <polygon 
+    points="256,36 447,141 447,371 256,476 65,371 65,141"
+    stroke="#06b6d4" stroke-width="3" fill="none" opacity="0.9"
+    filter="url(#glow)"
+  />
+  <!-- Hexagon inner -->
+  <polygon 
+    points="256,80 410,168 410,344 256,432 102,344 102,168"
+    stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.4"
+  />
+  <!-- Hexagon mid -->
+  <polygon 
+    points="256,120 378,187 378,325 256,392 134,325 134,187"
+    stroke="#06b6d4" stroke-width="1" fill="none" opacity="0.2"
+  />
+  
+  <!-- Core glow area -->
+  <circle cx="256" cy="256" r="120" fill="url(#core-glow)"/>
+  
+  <!-- Energy lines from center to hex vertices -->
+  <line x1="256" y1="36"  x2="256" y2="186" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="447" y1="141" x2="321" y2="211" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  <line x1="447" y1="371" x2="321" y2="301" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  <line x1="256" y1="476" x2="256" y2="326" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="65"  y1="371" x2="191" y2="301" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  <line x1="65"  y1="141" x2="191" y2="211" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  
+  <!-- Arc reactor rings -->
+  <circle cx="256" cy="256" r="90" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="70" stroke="#06b6d4" stroke-width="1" fill="none" opacity="0.4"/>
+  <circle cx="256" cy="256" r="50" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.5"/>
+  
+  <!-- Core fill -->
+  <circle cx="256" cy="256" r="36" fill="#06b6d4" opacity="0.15"/>
+  <circle cx="256" cy="256" r="26" fill="#06b6d4" opacity="0.9" filter="url(#glow-strong)"/>
+  <circle cx="256" cy="256" r="16" fill="white" opacity="0.9"/>
+  <!-- Core highlight -->
+  <circle cx="246" cy="246" r="6" fill="white" opacity="0.6"/>
+  
+  <!-- Corner accent dots at hex vertices -->
+  <circle cx="256" cy="36"  r="6" fill="#06b6d4" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="447" cy="141" r="5" fill="#06b6d4" opacity="0.7"/>
+  <circle cx="447" cy="371" r="5" fill="#06b6d4" opacity="0.7"/>
+  <circle cx="256" cy="476" r="6" fill="#06b6d4" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="65"  cy="371" r="5" fill="#06b6d4" opacity="0.7"/>
+  <circle cx="65"  cy="141" r="5" fill="#06b6d4" opacity="0.7"/>
+</svg>

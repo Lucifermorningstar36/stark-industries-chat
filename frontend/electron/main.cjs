@@ -1,20 +1,45 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, nativeImage } = require('electron');
 const path = require('path');
+const os = require('os');
+
+const isLinux = os.platform() === 'linux';
+const isWindows = os.platform() === 'win32';
+const isMac = os.platform() === 'darwin';
+
+// Cross-platform icon: Linux & Mac use PNG, Windows uses ICO
+function getIconPath() {
+  if (isWindows) {
+    const icoPath = path.join(__dirname, '../public/icon.ico');
+    const pngPath = path.join(__dirname, '../public/icon-512.png');
+    const fs = require('fs');
+    return fs.existsSync(icoPath) ? icoPath : pngPath;
+  }
+  // Linux & Mac
+  return path.join(__dirname, '../public/icon-512.png');
+}
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  const iconPath = getIconPath();
+  const windowOptions = {
     width: 1280,
     height: 800,
     minWidth: 800,
     minHeight: 600,
-    title: "Stark Industries Chat",
-    backgroundColor: "#050a0e",
+    title: 'Stark Industries Chat',
+    backgroundColor: '#050a0e',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    icon: path.join(__dirname, '../public/vite.svg') // Using Vite icon temporarily
-  });
+  };
+
+  // Apply icon if file exists
+  const fs = require('fs');
+  if (fs.existsSync(iconPath)) {
+    windowOptions.icon = iconPath;
+  }
+
+  const mainWindow = new BrowserWindow(windowOptions);
 
   // Remove the default menu bar for that clean Stark look
   mainWindow.setMenuBarVisibility(false);
@@ -27,6 +52,11 @@ function createWindow() {
     shell.openExternal(details.url);
     return { action: 'deny' };
   });
+
+  // Linux: handle window close button properly
+  mainWindow.on('close', () => {
+    app.quit();
+  });
 }
 
 app.whenReady().then(() => {
@@ -38,5 +68,7 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+  // On macOS, keep the app running even when all windows are closed (standard behavior)
+  // On Linux and Windows, quit when all windows are closed
+  if (!isMac) app.quit();
 });

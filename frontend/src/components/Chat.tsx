@@ -53,6 +53,26 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const API_URL = isElectron ? 'https://stark.net.tr' : (isLocalhost ? 'http://localhost:5000' : '');
 
+  // ── MOBILE KEYBOARD FIX: visualViewport API ──
+  // Tracks the keyboard opening/closing on iOS & Android and adjusts layout
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const onResize = () => {
+      const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
+      document.documentElement.style.setProperty(
+        '--keyboard-height',
+        `${Math.max(0, keyboardHeight)}px`
+      );
+    };
+    vv.addEventListener('resize', onResize);
+    vv.addEventListener('scroll', onResize);
+    return () => {
+      vv.removeEventListener('resize', onResize);
+      vv.removeEventListener('scroll', onResize);
+    };
+  }, []);
+
   const fetchChannels = async () => {
     try {
       const res = await axios.get(`${API_URL}/api/chat/channels`, { headers: { Authorization: `Bearer ${token}` } });
@@ -226,7 +246,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
   const activeChannel = channels.find(c => c.id === activeChannelId);
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full fixed inset-0 overflow-hidden si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
+    <div className="chat-root si-grid-bg" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}
       onClick={() => contextMenu && setContextMenu(null)}>
       <div className="scanline" />
       <div className="flex flex-1 overflow-hidden relative">
@@ -438,7 +458,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
               )}
 
               {/* Input */}
-              <div className="p-3 md:p-4 z-10" style={{ borderTop: '1px solid var(--border)' }}>
+              <div className="chat-input-bar p-3 md:p-4 z-10" style={{ borderTop: '1px solid var(--border)' }}>
                 <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden"
                   accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt,.zip,.rar" />
                 <form onSubmit={handleSend} className="flex items-center gap-2">
@@ -492,7 +512,7 @@ export default function Chat({ token, user: initialUser, onLogout, dark, onToggl
       </div>
 
       {/* Mobile bottom nav */}
-      <div className="md:hidden h-14 shrink-0 flex items-center justify-around px-2 z-[60]"
+      <div className="mobile-bottom-nav md:hidden h-14 shrink-0 flex items-center justify-around px-2 z-[60]"
         style={{ borderTop: '1px solid var(--border)', background: 'var(--header-bg)' }}>
         {[
           { icon: MessageSquare, label: 'COMMS', action: () => { setShowMobileSidebar(true); setShowMobileUsers(false); }, active: showMobileSidebar },

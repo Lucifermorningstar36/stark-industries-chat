@@ -3,9 +3,24 @@
 @tailwind utilities;
 
 /* ── CROSS-BROWSER FULL-HEIGHT FIX ── */
-html, body {
+html {
   height: 100%;
-  min-height: 100%;
+  /* iOS Safari: prevents bounce / overscroll */
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+body {
+  height: 100%;
+  width: 100%;
+  /* Fallback for browsers that don't support dvh */
+  min-height: 100vh;
+  /* Dynamic viewport height — accounts for mobile browser chrome */
+  min-height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  /* Critical: allow content to scroll inside body, not body itself */
+  -webkit-overflow-scrolling: touch;
 }
 
 * { box-sizing: border-box; }
@@ -226,4 +241,51 @@ a, button, input, select, textarea {
 .min-h-dvh {
   min-height: 100vh;
   min-height: 100dvh;
+}
+
+/* ── MOBILE KEYBOARD / SAFE AREA FIXES ── */
+/* The main chat container must fill the visual viewport exactly */
+.chat-root {
+  /* Anchor to the top-left of the visual viewport */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Use dvh with vh fallback */
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input bar — stick to the visual viewport bottom (above keyboard) */
+.chat-input-bar {
+  position: relative;
+  /* Respect the home indicator / notch on iOS */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  flex-shrink: 0;
+}
+
+/* Mobile bottom nav — also respect safe area */
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  flex-shrink: 0;
+}
+
+/* Keyboard-aware layout: when visualViewport JS sets --keyboard-height,
+   push content up so nothing hides behind the keyboard */
+@supports (height: env(keyboard-inset-height)) {
+  .chat-root {
+    height: calc(100dvh - env(keyboard-inset-height, 0px));
+  }
+}
+
+/* Prevent overscroll / bounce on iOS in the whole app */
+@media (max-width: 768px) {
+  .chat-messages-area {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
 }
