@@ -1,10 +1,14 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "electron/main.cjs",
-  "author": "Stark Industries",
+  "author": {
+    "name": "Stark Industries",
+    "email": "admin@stark.net.tr"
+  },
+  "homepage": "https://stark.net.tr",
   "description": "Stark Industries Chat Secure Comm Link",
   "scripts": {
     "dev": "vite",
@@ -43,6 +47,7 @@
       "icon": "public/icon-512.png",
       "category": "Network",
       "description": "Stark Industries Secure Comm Link",
+      "maintainer": "Stark Industries <admin@stark.net.tr>",
       "desktop": {
         "entry": {
           "Name": "Stark Chat",
